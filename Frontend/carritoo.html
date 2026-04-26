@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mi Carrito — EcoMercado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+
+:root {
+–ink: #1c2b1e;
+–moss: #3d6b4f;
+–sage: #7aab8a;
+–mist: #d8ead0;
+–paper: #f6f2eb;
+–warm: #f0ebe0;
+–del: #d9534f;
+}
+
+body {
+font-family: ‘DM Sans’, sans-serif;
+background: var(–paper);
+color: var(–ink);
+min-height: 100vh;
+}
+
+nav {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 18px 5%;
+border-bottom: 1px dashed #c9d9c4;
+}
+.logo {
+display: flex;
+align-items: baseline;
+gap: 6px;
+font-family: ‘Lora’, serif;
+font-size: 1.2rem;
+color: var(–ink);
+font-weight: 600;
+text-decoration: none;
+}
+.logo em {
+font-style: italic;
+color: var(–sage);
+font-size: .95rem;
+font-weight: 400;
+}
+.nav-links {
+list-style: none;
+display: flex;
+gap: 24px;
+}
+.nav-links a {
+font-size: .85rem;
+color: var(–moss);
+text-decoration: none;
+border-bottom: 1px solid transparent;
+padding-bottom: 2px;
+transition: border-color .2s;
+}
+.nav-links a:hover { border-color: var(–sage) }
+.cart-pill {
+display: flex;
+align-items: center;
+gap: 6px;
+background: var(–warm);
+border: 1px solid #c9d9c4;
+padding: 7px 16px;
+border-radius: 99px;
+font-size: .85rem;
+color: var(–ink);
+text-decoration: none;
+transition: background .2s;
+}
+.cart-pill:hover { background: var(–mist) }
+
+.page {
+max-width: 860px;
+margin: 0 auto;
+padding: 44px 5% 80px;
+}
+.page-title {
+font-family: ‘Lora’, serif;
+font-size: 2rem;
+font-weight: 600;
+color: var(–ink);
+margin-bottom: 4px;
+}
+.page-subtitle {
+font-size: .88rem;
+color: var(–sage);
+margin-bottom: 36px;
+font-style: italic;
+}
+
+.item-list { display: flex; flex-direction: column; }
+
+.item {
+display: grid;
+grid-template-columns: 70px 1fr auto;
+gap: 16px;
+align-items: center;
+padding: 18px 0;
+border-bottom: 1px dashed #c9d9c4;
+}
+.item-img {
+width: 70px;
+height: 70px;
+min-width: 70px;
+border-radius: 12px;
+object-fit: cover;
+display: block;
+border: 1px solid #dde8d8;
+background: var(–mist);
+}
+.item-name {
+font-family: ‘Lora’, serif;
+font-size: 1rem;
+font-weight: 600;
+margin-bottom: 2px;
+}
+.item-origin {
+font-size: .78rem;
+color: var(–sage);
+margin-bottom: 6px;
+}
+.item-tag {
+display: inline-block;
+font-size: .7rem;
+background: var(–mist);
+color: var(–moss);
+padding: 2px 8px;
+border-radius: 99px;
+margin-bottom: 10px;
+}
+.qty-ctrl {
+display: inline-flex;
+align-items: center;
+gap: 10px;
+border: 1px solid #c9d9c4;
+border-radius: 99px;
+padding: 4px 12px;
+background: white;
+}
+.qty-ctrl button {
+background: none;
+border: none;
+cursor: pointer;
+font-size: .95rem;
+color: var(–moss);
+line-height: 1;
+padding: 0;
+}
+.qty-ctrl span {
+font-size: .88rem;
+font-weight: 500;
+min-width: 14px;
+text-align: center;
+}
+.item-right { text-align: right }
+.item-price {
+font-family: ‘Lora’, serif;
+font-size: 1.05rem;
+font-weight: 600;
+color: var(–moss);
+}
+.item-unit {
+font-size: .72rem;
+color: #aab8a6;
+margin-bottom: 10px;
+}
+
+.summary {
+margin-top: 44px;
+padding-top: 28px;
+border-top: 1.5px solid var(–ink);
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 24px;
+align-items: start;
+}
+.sum-label {
+font-size: .78rem;
+text-transform: uppercase;
+letter-spacing: .06em;
+color: var(–sage);
+margin-bottom: 14px;
+font-weight: 500;
+}
+.sum-rows { display: flex; flex-direction: column; gap: 8px }
+.sum-row {
+display: flex;
+justify-content: space-between;
+font-size: .88rem;
+color: #5a6e5c;
+}
+.sum-row.discount { color: var(–moss) }
+.sum-total {
+display: flex;
+justify-content: space-between;
+margin-top: 16px;
+padding-top: 16px;
+border-top: 1px solid #c9d9c4;
+font-family: ‘Lora’, serif;
+font-size: 1.35rem;
+font-weight: 600;
+}
+.sum-total span:last-child { color: var(–moss) }
+.sum-actions { display: flex; flex-direction: column; gap: 10px }
+.btn-confirm {
+display: block;
+width: 100%;
+padding: 14px;
+background: var(–ink);
+color: white;
+text-align: center;
+border: none;
+border-radius: 10px;
+font-family: ‘DM Sans’, sans-serif;
+font-weight: 500;
+font-size: .92rem;
+cursor: pointer;
+text-decoration: none;
+transition: background .2s;
+}
+.btn-confirm:hover { background: var(–moss) }
+.btn-continue {
+display: block;
+width: 100%;
+padding: 12px;
+background: transparent;
+color: var(–ink);
+text-align: center;
+border: 1px dashed #afc5b0;
+border-radius: 10px;
+font-family: ‘DM Sans’, sans-serif;
+font-size: .85rem;
+cursor: pointer;
+text-decoration: none;
+transition: background .2s;
+}
+.btn-continue:hover { background: var(–mist) }
+
+@media (max-width: 640px) {
+nav { padding: 14px 5% }
+.logo em { display: none }
+.logo { font-size: 1.05rem }
+.nav-links { display: none }
+.cart-pill { padding: 6px 12px; font-size: .8rem }
+.page { padding: 28px 5% 60px }
+.page-title { font-size: 1.5rem }
+.item { grid-template-columns: 56px 1fr auto; gap: 12px; padding: 16px 0 }
+.item-img { width: 56px; height: 56px; min-width: 56px; border-radius: 10px }
+.summary { grid-template-columns: 1fr; gap: 28px; margin-top: 32px }
+.sum-total { font-size: 1.15rem }
+}
+</style>
+
+</head>
+<body>
+
+<nav>
+  <a class="logo">🌿 EcoMercado</a>
+  <div style="display:flex;gap:8px;align-items:center">
+    <a href="carritoo.html" class="cart-pill">🛒 <span id="count">0</span> productos</a>
+    <a href="panel.html" class="cart-pill">Perfil</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <h1 class="page-title">Tu carrito</h1>
+  <p class="page-subtitle">Apoyando a productores de tu región con cada compra 🌱</p>
+
+  <!-- Productos cargados desde la API -->
+
+  <div class="item-list" id="item-list">
+    <p style="color:#7aab8a;font-style:italic">Cargando productos...</p>
+  </div>
+
+  <div class="summary">
+    <div>
+      <p class="sum-label">Resumen</p>
+      <div class="sum-rows">
+        <div class="sum-row"><span>Subtotal</span><span id="subtotal">$0</span></div>
+        <div class="sum-row"><span>Envío estimado</span><span>$2.500</span></div>
+        <div class="sum-row discount"><span>Descuento local (5%)</span><span id="descuento">−$0</span></div>
+      </div>
+      <div class="sum-total"><span>Total</span><span id="total">$0</span></div>
+    </div>
+    <div class="sum-actions">
+      <p class="sum-label">¿Listo?</p>
+      <a class="btn-confirm">Confirmar pedido →</a>
+      <a href="index.html" class="btn-continue">Seguir comprando</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const API = 'http://localhost:5000/api';
+let productos = [];
+
+async function cargarProductos() {
+  try {
+    const res = await fetch(`${API}/productos`);
+    productos = await res.json();
+    const lista = document.getElementById('item-list');
+
+    if (productos.length === 0) {
+      lista.innerHTML = '<p style="color:#7aab8a">No hay productos disponibles.</p>';
+      return;
+    }
+
+    document.getElementById('count').textContent = productos.length;
+
+    lista.innerHTML = productos.map(p => `
+      <div class="item">
+        <img class="item-img" src="${p.imagen || 'brocoli.jpg'}" alt="${p.nombre}">
+        <div>
+          <div class="item-name">${p.nombre}</div>
+          <div class="item-origin">📍 ${p.categoria || 'Producto local'}</div>
+          <span class="item-tag">🌱 Producto local</span><br>
+          <div class="qty-ctrl">
+            <button onclick="cambiarQty('${p._id}', -1)">−</button>
+            <span id="qty-${p._id}">1</span>
+            <button onclick="cambiarQty('${p._id}', 1)">+</button>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price" id="precio-${p._id}">$${p.precio.toLocaleString()}</div>
+          <div class="item-unit">$${p.precio.toLocaleString()} / unidad</div>
+        </div>
+      </div>
+    `).join('');
+
+    calcularTotal();
+  } catch (err) {
+    document.getElementById('item-list').innerHTML =
+      '<p style="color:red">❌ Error conectando con el servidor. ¿Está corriendo el backend?</p>';
+  }
+}
+
+function cambiarQty(id, delta) {
+  const span = document.getElementById(`qty-${id}`);
+  let val = parseInt(span.textContent) + delta;
+  if (val < 1) val = 1;
+  span.textContent = val;
+  calcularTotal();
+}
+
+function calcularTotal() {
+  let subtotal = 0;
+  productos.forEach(p => {
+    const qty = parseInt(document.getElementById(`qty-${p._id}`)?.textContent || 1);
+    subtotal += p.precio * qty;
+  });
+  const descuento = Math.round(subtotal * 0.05);
+  const total = subtotal + 2500 - descuento;
+  document.getElementById('subtotal').textContent = '$' + subtotal.toLocaleString();
+  document.getElementById('descuento').textContent = '−$' + descuento.toLocaleString();
+  document.getElementById('total').textContent = '$' + total.toLocaleString();
+}
+
+cargarProductos();
+</script>
+
+</body>
+</html>
