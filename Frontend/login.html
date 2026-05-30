@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EcoMercado — Bienvenido</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --g1:#0d2818;--g2:#1a4731;--g3:#2d7a52;--g4:#52b788;--g5:#b7e4c7;--g6:#e8f5ee;
+  --cream:#fdf8ee;--amber:#e9b84a;
+}
+
+body{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  min-height:100vh;
+  display:flex;
+  background:var(--cream);
+  overflow:hidden;
+}
+
+/* Panel izquierdo — visual */
+.panel-left{
+  flex:1;
+  background:
+    linear-gradient(135deg,rgba(13,40,24,.93),rgba(45,122,82,.85)),
+    url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1000&q=80') center/cover no-repeat;
+  display:flex;flex-direction:column;
+  justify-content:space-between;
+  padding:48px 52px;
+  position:relative;overflow:hidden;
+}
+.panel-left::after{
+  content:'';
+  position:absolute;right:-60px;top:0;bottom:0;width:120px;
+  background:var(--cream);
+  clip-path:ellipse(60px 55% at 100% 50%);
+}
+
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{
+  width:46px;height:46px;
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:13px;
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+}
+.brand-name{
+  font-family:'Playfair Display',serif;
+  font-weight:900;font-size:1.5rem;color:#fff;
+}
+
+.left-content{flex:1;display:flex;flex-direction:column;justify-content:center;padding:40px 0}
+.left-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(82,183,136,.2);border:1px solid rgba(82,183,136,.4);
+  padding:5px 12px;border-radius:30px;
+  font-size:.75rem;font-weight:600;color:var(--g5);
+  margin-bottom:20px;width:fit-content;letter-spacing:.04em;
+}
+.left-content h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2rem,3.5vw,3rem);
+  color:#fff;line-height:1.15;margin-bottom:16px;
+}
+.left-content h1 em{font-style:italic;color:var(--g5)}
+.left-sub{color:rgba(255,255,255,.68);line-height:1.7;font-size:.95rem;max-width:380px}
+
+.left-stats{
+  display:flex;gap:0;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;overflow:hidden;
+  margin-top:36px;
+}
+.lstat{flex:1;padding:16px;text-align:center;border-right:1px solid rgba(255,255,255,.1)}
+.lstat:last-child{border-right:none}
+.lstat-n{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:#fff;display:block}
+.lstat-l{font-size:.7rem;color:rgba(255,255,255,.5);margin-top:2px}
+
+/* Panel derecho — acción */
+.panel-right{
+  width:420px;flex-shrink:0;
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  padding:52px 44px;
+  background:var(--cream);
+}
+
+.welcome-icon{
+  width:70px;height:70px;
+  background:linear-gradient(135deg,var(--g2),var(--g4));
+  border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;margin-bottom:24px;
+  box-shadow:0 8px 24px rgba(13,40,24,.2);
+}
+.panel-right h2{
+  font-family:'Playfair Display',serif;
+  font-size:1.8rem;font-weight:900;
+  color:var(--g1);margin-bottom:8px;text-align:center;
+}
+.panel-right p{
+  color:#6b7f70;font-size:.9rem;line-height:1.6;
+  text-align:center;margin-bottom:36px;
+}
+
+.btn-login{
+  display:block;width:100%;padding:15px;
+  border-radius:13px;border:none;
+  background:linear-gradient(135deg,var(--g2),var(--g3));
+  color:#fff;font-family:'Plus Jakarta Sans',sans-serif;
+  font-weight:700;font-size:1rem;cursor:pointer;
+  transition:.22s;text-decoration:none;text-align:center;
+  margin-bottom:12px;
+  box-shadow:0 6px 20px rgba(26,71,49,.25);
+}
+.btn-login:hover{background:linear-gradient(135deg,var(--g1),var(--g2));transform:translateY(-2px);box-shadow:0 10px 28px rgba(26,71,49,.3)}
+
+.btn-register{
+  display:block;width:100%;padding:14px;
+  border-radius:13px;
+  border:2px solid #c5d9ca;background:transparent;
+  color:var(--g2);font-family:'Plus Jakarta Sans',sans-serif;
+  font-weight:700;font-size:1rem;cursor:pointer;
+  transition:.22s;text-decoration:none;text-align:center;
+}
+.btn-register:hover{background:var(--g6);border-color:var(--g4)}
+
+.divider{
+  display:flex;align-items:center;gap:12px;
+  width:100%;margin:20px 0;color:#a0b0a5;font-size:.78rem;
+}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#dce8df}
+
+.features{width:100%;margin-top:28px;display:flex;flex-direction:column;gap:10px}
+.feat{
+  display:flex;align-items:center;gap:10px;
+  background:#fff;border:1px solid #e2ede6;
+  border-radius:10px;padding:10px 14px;
+}
+.feat-icon{font-size:1.1rem}
+.feat-text{font-size:.8rem;color:#4d6155;font-weight:500}
+
+@media(max-width:768px){
+  body{flex-direction:column;overflow:auto}
+  .panel-left{min-height:280px;flex:none}
+  .panel-left::after{display:none}
+  .panel-right{width:100%;padding:36px 28px}
+}
+</style>
+</head>
+<body>
+
+<!-- Panel izquierdo -->
+<div class="panel-left">
+  <div class="brand">
+    <div class="brand-mark">🌿</div>
+    <span class="brand-name">EcoMercado</span>
+  </div>
+
+  <div class="left-content">
+    <div class="left-tag">🌱 Plataforma de productores locales</div>
+    <h1>Del Campo<br>a <em>Tu Mesa</em></h1>
+    <p class="left-sub">Conectamos directamente a productores agrícolas locales con consumidores. Sin intermediarios, más fresco, más justo.</p>
+    <div class="left-stats">
+      <div class="lstat"><span class="lstat-n">150+</span><div class="lstat-l">Productores</div></div>
+      <div class="lstat"><span class="lstat-n">800+</span><div class="lstat-l">Productos</div></div>
+      <div class="lstat"><span class="lstat-n">2.5K</span><div class="lstat-l">Pedidos</div></div>
+    </div>
+  </div>
+
+  <div style="font-size:.75rem;color:rgba(255,255,255,.35)">© 2026 EcoMercado · Universidad Santiago de Cali</div>
+</div>
+
+<!-- Panel derecho -->
+<div class="panel-right">
+  <div class="welcome-icon">🌿</div>
+  <h2>¡Bienvenido!</h2>
+  <p>Compra productos frescos directamente<br>de productores locales de tu región.</p>
+
+  <a href="inicio.html" class="btn-login">Iniciar sesión</a>
+
+  <div class="divider">¿no tienes cuenta?</div>
+
+  <a href="Registro.html" class="btn-register">Registrarse gratis</a>
+
+  <div class="features">
+    <div class="feat"><span class="feat-icon">🚫</span><span class="feat-text">Sin intermediarios — directo del productor</span></div>
+    <div class="feat"><span class="feat-icon">🌿</span><span class="feat-text">Productos frescos y naturales</span></div>
+    <div class="feat"><span class="feat-icon">🔒</span><span class="feat-text">Acceso seguro con Google OAuth 2.0 y JWT</span></div>
+  </div>
+</div>
+
+<script>
+// Si ya tiene sesión activa, ir directo al inicio
+(function() {
+  const token = localStorage.getItem('eco_token');
+  if (!token) return;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    if (payload.exp * 1000 > Date.now()) {
+      window.location.href = 'index.html';
+    } else {
+      localStorage.removeItem('eco_token');
+      localStorage.removeItem('eco_nombre');
+    }
+  } catch(e) {
+    localStorage.removeItem('eco_token');
+    localStorage.removeItem('eco_nombre');
+  }
+})();
+</script>
+
+</body>
+</html>
