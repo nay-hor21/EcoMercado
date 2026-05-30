@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EcoMercado — Del Campo a Tu Mesa</title>
+<script>
+// Capturar token si viene de Google OAuth
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const urlToken  = params.get('token');
+  const urlNombre = params.get('nombre');
+  if (urlToken) {
+    localStorage.setItem('eco_token', urlToken);
+    if (urlNombre) localStorage.setItem('eco_nombre', decodeURIComponent(urlNombre));
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --g1:#0d2818;--g2:#1a4731;--g3:#2d7a52;--g4:#52b788;--g5:#b7e4c7;--g6:#e8f5ee;
+  --cream:#fdf8ee;--amber:#e9b84a;--w:#fff;
+  --t1:#111;--t2:#3d4f42;--t3:#7a907f;
+  --r:16px;--rs:10px;
+  --sh:0 4px 18px rgba(13,40,24,.10);
+  --shl:0 10px 40px rgba(13,40,24,.18)
+}
+
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--t1);overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:100;height:68px;
+  background:rgba(253,248,238,.95);backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(82,183,136,.2);
+  display:flex;align-items:center;justify-content:space-between;padding:0 6%
+}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{
+  width:38px;height:38px;
+  background:linear-gradient(135deg,var(--g2),var(--g4));
+  border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px
+}
+.logo-text{font-family:'Playfair Display',serif;font-weight:900;font-size:1.3rem;color:var(--g1)}
+.nav-links{display:flex;gap:4px;list-style:none}
+.nav-links a{padding:8px 16px;border-radius:30px;color:var(--t2);font-weight:500;font-size:.9rem;transition:.2s}
+.nav-links a:hover,.nav-links a.active{background:var(--g6);color:var(--g2)}
+.nav-right{display:flex;gap:10px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:6px;padding:10px 22px;border-radius:30px;
+  font-weight:600;font-size:.88rem;cursor:pointer;transition:.22s;border:none;font-family:inherit
+}
+.btn-green{background:var(--g2);color:#fff}
+.btn-green:hover{background:var(--g1);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--g2);border:2px solid var(--g2)}
+.btn-outline:hover{background:var(--g6)}
+.btn-amber{background:var(--amber);color:var(--g1)}
+.btn-amber:hover{background:#d4a435;transform:translateY(-2px);box-shadow:0 6px 20px rgba(233,184,74,.4)}
+
+/* ── HERO ── */
+.hero{
+  background:
+    linear-gradient(135deg,rgba(13,40,24,.93) 0%,rgba(26,71,49,.88) 55%,rgba(45,122,82,.82) 100%),
+    url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1400&q=80') center/cover no-repeat;
+  min-height:90vh;
+  display:grid;grid-template-columns:1fr 1fr;
+  align-items:center;padding:80px 6%;gap:60px;position:relative;overflow:hidden
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(82,183,136,.2);border:1px solid rgba(82,183,136,.4);
+  padding:6px 14px;border-radius:30px;
+  font-size:.78rem;font-weight:600;color:var(--g5);
+  margin-bottom:22px;letter-spacing:.04em
+}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.4rem,5vw,3.8rem);
+  font-weight:900;line-height:1.1;color:#fff;margin-bottom:20px
+}
+.hero h1 em{font-style:italic;color:var(--g5)}
+.hero-sub{font-size:1.05rem;color:rgba(255,255,255,.72);line-height:1.7;max-width:480px;margin-bottom:34px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:48px}
+.hero-stats{
+  display:flex;gap:0;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--r);overflow:hidden
+}
+.hstat{flex:1;padding:18px 20px;text-align:center;border-right:1px solid rgba(255,255,255,.1)}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:#fff;display:block}
+.hstat-l{font-size:.75rem;color:rgba(255,255,255,.55);margin-top:2px}
+
+/* Hero visual — foto real */
+.hero-visual{display:flex;justify-content:center;align-items:center;position:relative}
+.himg-frame{
+  width:100%;border-radius:24px;overflow:hidden;
+  position:relative;box-shadow:0 24px 70px rgba(0,0,0,.5);
+  aspect-ratio:4/3
+}
+.himg-frame img{width:100%;height:100%;object-fit:cover;display:block}
+.himg-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(13,40,24,.75) 0%,rgba(13,40,24,.1) 60%,transparent 100%)
+}
+.himg-bottom{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:20px;display:flex;gap:10px
+}
+.himg-stat{
+  flex:1;background:rgba(255,255,255,.12);
+  backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);
+  border-radius:12px;padding:10px;text-align:center
+}
+.himg-stat-n{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:900;color:#fff}
+.himg-stat-l{font-size:.68rem;color:rgba(255,255,255,.65);margin-top:1px}
+.himg-badge{
+  position:absolute;top:16px;right:16px;
+  background:var(--amber);border-radius:12px;
+  padding:10px 14px;box-shadow:0 6px 20px rgba(233,184,74,.5)
+}
+.himg-badge p{font-size:.72rem;font-weight:700;color:var(--g1);white-space:nowrap}
+
+/* ── CATEGORÍAS ── */
+.catstrip{background:var(--w);padding:32px 6%;border-bottom:1px solid var(--g6)}
+.catstrip-title{text-align:center;font-size:.78rem;font-weight:700;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px}
+.cats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.cat-chip{
+  display:flex;align-items:center;gap:8px;padding:10px 20px;border-radius:30px;
+  border:1.5px solid var(--g5);background:var(--g6);
+  font-weight:600;font-size:.88rem;color:var(--g2);cursor:pointer;transition:.2s
+}
+.cat-chip:hover{background:var(--g2);color:#fff;border-color:var(--g2);transform:translateY(-2px)}
+.cat-chip img{width:22px;height:22px;object-fit:cover;border-radius:50%}
+
+/* ── BENEFITS ── */
+.benefits{
+  background:linear-gradient(135deg,var(--g1),var(--g2));
+  padding:90px 6%;display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center
+}
+.sec-tag{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
+.sec-tag.light{color:var(--g5)}
+.sec-tag.dark{color:var(--g3)}
+.benefits h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);color:#fff;margin-bottom:16px;line-height:1.2}
+.benefits-sub{color:rgba(255,255,255,.65);line-height:1.7;margin-bottom:36px;font-size:.95rem}
+.benefit-list{display:flex;flex-direction:column;gap:14px}
+.bitem{
+  display:flex;align-items:flex-start;gap:16px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;padding:16px
+}
+.bitem-icon{
+  width:44px;height:44px;flex-shrink:0;
+  background:rgba(82,183,136,.25);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:1.3rem
+}
+.bitem-text h4{color:#fff;font-size:.95rem;font-weight:700;margin-bottom:4px}
+.bitem-text p{color:rgba(255,255,255,.55);font-size:.82rem;line-height:1.5}
+
+/* Benefits visual — foto real */
+.bvis-wrap{position:relative}
+.bvis-main-img{
+  width:100%;border-radius:20px;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);aspect-ratio:4/3
+}
+.bvis-main-img img{width:100%;height:100%;object-fit:cover;display:block}
+.bvis-card-float{
+  position:absolute;bottom:-20px;left:-20px;
+  background:rgba(255,255,255,.12);backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.2);border-radius:16px;
+  padding:14px 18px;max-width:220px
+}
+.bvis-card-float .bf-title{color:#fff;font-weight:700;font-size:.85rem;margin-bottom:4px}
+.bvis-card-float .bf-sub{color:rgba(255,255,255,.6);font-size:.75rem}
+.bvis-card-float .bf-num{
+  font-family:'Playfair Display',serif;font-size:1.8rem;
+  font-weight:900;color:var(--amber);margin-top:4px
+}
+
+/* ── PRODUCTS ── */
+.products-sec{padding:90px 6%;background:var(--cream)}
+.sec-header{text-align:center;margin-bottom:48px}
+.sec-header h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.5rem);color:var(--g1);margin-bottom:10px}
+.sec-header p{color:var(--t3);font-size:.95rem;max-width:500px;margin:0 auto}
+.products-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:24px;margin-bottom:40px
+}
+.pcard{
+  background:var(--w);border-radius:var(--r);
+  overflow:hidden;box-shadow:var(--sh);transition:.28s;display:flex;flex-direction:column
+}
+.pcard:hover{transform:translateY(-6px);box-shadow:var(--shl)}
+.pcard-img{height:180px;overflow:hidden;position:relative;background:var(--g6)}
+.pcard-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+.pcard:hover .pcard-img img{transform:scale(1.07)}
+.pcard-body{padding:16px;flex:1;display:flex;flex-direction:column}
+.pcard-badge{
+  display:inline-block;font-size:.68rem;background:var(--g6);color:var(--g3);
+  padding:3px 8px;border-radius:20px;font-weight:700;margin-bottom:8px
+}
+.pcard-name{font-family:'Playfair Display',serif;font-weight:700;color:var(--g1);font-size:1.05rem;margin-bottom:4px}
+.pcard-prod{font-size:.78rem;color:var(--t3);margin-bottom:12px}
+.pcard-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+.pcard-price{font-family:'Playfair Display',serif;font-weight:700;color:var(--g3);font-size:1.1rem}
+.pcard-unit{font-size:.7rem;color:var(--t3)}
+.pcard-btn{
+  background:var(--g2);color:#fff;border:none;border-radius:8px;
+  padding:8px 14px;font-size:.8rem;font-weight:700;cursor:pointer;transition:.2s;font-family:inherit
+}
+.pcard-btn:hover{background:var(--g1)}
+.sec-footer{text-align:center}
+
+/* ── HOW IT WORKS ── */
+.how{background:linear-gradient(135deg,var(--g1),var(--g2));padding:90px 6%}
+.how h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.5rem);color:#fff;text-align:center;margin-bottom:10px}
+.how-sub{color:rgba(255,255,255,.6);text-align:center;margin-bottom:56px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.step{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  border-radius:20px;padding:32px 24px;text-align:center;position:relative
+}
+.step-num{
+  width:56px;height:56px;background:var(--amber);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;
+  color:var(--g1);margin:0 auto 18px
+}
+.step-img{
+  width:100%;height:110px;border-radius:12px;overflow:hidden;margin-bottom:16px
+}
+.step-img img{width:100%;height:100%;object-fit:cover;display:block}
+.step h3{font-family:'Playfair Display',serif;color:#fff;font-size:1.1rem;margin-bottom:10px}
+.step p{color:rgba(255,255,255,.55);font-size:.85rem;line-height:1.6}
+.step-arrow{position:absolute;right:-16px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.25);font-size:1.5rem;z-index:1}
+.step:last-child .step-arrow{display:none}
+
+/* ── PRODUCERS ── */
+.producers{padding:90px 6%;background:var(--w)}
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-bottom:40px}
+.prodcard{
+  background:var(--cream);border-radius:var(--r);
+  overflow:hidden;box-shadow:var(--sh);transition:.25s;border:1.5px solid var(--g6)
+}
+.prodcard:hover{transform:translateY(-5px);box-shadow:var(--shl)}
+.prodcard-banner{height:130px;overflow:hidden;position:relative}
+.prodcard-banner img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.prodcard:hover .prodcard-banner img{transform:scale(1.06)}
+.prodcard-banner-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(13,40,24,.5),transparent)
+}
+.prodcard-body{padding:20px}
+.prodcard-avatar{
+  width:52px;height:52px;border-radius:50%;overflow:hidden;
+  margin-top:-36px;border:3px solid var(--w);margin-bottom:10px;background:var(--g2)
+}
+.prodcard-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.prodcard-name{font-family:'Playfair Display',serif;font-weight:700;color:var(--g1);font-size:1.05rem;margin-bottom:2px}
+.prodcard-loc{font-size:.78rem;color:var(--t3);margin-bottom:10px}
+.prodcard-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.ptag{font-size:.68rem;background:var(--g6);color:var(--g2);padding:3px 8px;border-radius:20px;font-weight:600}
+.prodcard-stats{display:flex;gap:0;border-top:1px solid var(--g6);padding-top:14px}
+.pstat{flex:1;text-align:center}
+.pstat-n{font-weight:700;color:var(--g2);font-size:.95rem}
+.pstat-l{font-size:.7rem;color:var(--t3)}
+
+/* ── CTA ── */
+.cta-banner{
+  position:relative;overflow:hidden;
+  padding:100px 6%;text-align:center
+}
+.cta-bg{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(13,40,24,.92),rgba(45,122,82,.88));
+}
+.cta-bg-img{position:absolute;inset:0;z-index:-1}
+.cta-bg-img img{width:100%;height:100%;object-fit:cover;display:block}
+.cta-content{position:relative;z-index:1}
+.cta-banner h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);color:#fff;margin-bottom:14px}
+.cta-banner p{color:rgba(255,255,255,.7);font-size:1.05rem;margin-bottom:36px;max-width:500px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+
+/* ── FOOTER ── */
+footer{background:var(--g1);padding:60px 6% 30px;color:rgba(255,255,255,.6)}
+.foot-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.foot-desc{font-size:.85rem;line-height:1.7;max-width:260px;margin-bottom:20px}
+.foot-social{display:flex;gap:10px}
+.social-btn{
+  width:36px;height:36px;background:rgba(255,255,255,.1);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;transition:.2s;cursor:pointer
+}
+.social-btn:hover{background:var(--g3)}
+.foot-col h4{color:#fff;font-size:.9rem;font-weight:700;margin-bottom:14px}
+.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.foot-col a{font-size:.84rem;transition:.2s}
+.foot-col a:hover{color:#fff}
+.foot-bottom{
+  border-top:1px solid rgba(255,255,255,.1);padding-top:24px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:.8rem;flex-wrap:wrap;gap:10px
+}
+.foot-bottom a{color:rgba(255,255,255,.5);margin-left:16px}
+.foot-bottom a:hover{color:#fff}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .hero{grid-template-columns:1fr;gap:40px;min-height:auto;padding:60px 6%}
+  .hero-visual{max-width:500px;margin:0 auto;width:100%}
+  .benefits{grid-template-columns:1fr;gap:40px}
+  .bvis-card-float{position:static;margin-top:14px;max-width:100%}
+  .foot-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .steps{grid-template-columns:1fr}
+  .step-arrow{display:none}
+  .prod-grid{grid-template-columns:1fr 1fr}
+  .foot-top{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+@media(max-width:480px){
+  .hero h1{font-size:2rem}
+  .prod-grid{grid-template-columns:1fr}
+  .products-grid{grid-template-columns:1fr}
+  .hero-stats{flex-direction:column}
+  .hstat{border-right:none;border-bottom:1px solid rgba(255,255,255,.1)}
+  .hstat:last-child{border-bottom:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-mark">🌿</div>
+    <span class="logo-text">EcoMercado</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Inicio</a></li>
+    <li><a href="#productores">Productores</a></li>
+    <li><a href="#como-funciona">Nosotros</a></li>
+  </ul>
+  <div class="nav-right" id="nav-right">
+    <a href="carritoo.html" class="btn btn-outline">🛒 Carrito</a>
+    <!-- Se llena dinámicamente según sesión -->
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">🌱 Plataforma de productores locales</div>
+    <h1>Del Campo<br>a <em>Tu Mesa</em></h1>
+    <p class="hero-sub">Conectamos directamente a productores agrícolas locales con consumidores. Sin intermediarios, más fresco, más justo.</p>
+    <div class="hero-btns">
+      <a href="carritoo.html" class="btn btn-amber" style="padding:14px 28px;font-size:1rem">🛒 Explorar Tienda</a>
+      <a href="#productores" class="btn" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);padding:14px 28px;font-size:1rem">Soy Productor →</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">150+</span><div class="hstat-l">Productores activos</div></div>
+      <div class="hstat"><span class="hstat-n">800+</span><div class="hstat-l">Productos frescos</div></div>
+      <div class="hstat"><span class="hstat-n">2.5K</span><div class="hstat-l">Pedidos completados</div></div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="himg-frame">
+      <img src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=700&q=80" alt="Mercado local de productos frescos">
+      <div class="himg-overlay"></div>
+      <div class="himg-bottom">
+        <div class="himg-stat"><div class="himg-stat-n">98%</div><div class="himg-stat-l">Satisfacción</div></div>
+        <div class="himg-stat"><div class="himg-stat-n">48h</div><div class="himg-stat-l">Entrega</div></div>
+        <div class="himg-stat"><div class="himg-stat-n">0</div><div class="himg-stat-l">Intermediarios</div></div>
+      </div>
+      <div class="himg-badge"><p>🏆 Plataforma #1<br>de productores locales</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORÍAS -->
+<section class="catstrip">
+  <div class="catstrip-title">Explora por categoría</div>
+  <div class="cats">
+    <a href="carritoo.html" class="cat-chip">🥦 Verduras</a>
+    <a href="carritoo.html" class="cat-chip">🍎 Frutas</a>
+    <a href="carritoo.html" class="cat-chip">🥛 Lácteos</a>
+    <a href="carritoo.html" class="cat-chip">🍯 Miel</a>
+    <a href="carritoo.html" class="cat-chip">🌾 Granos</a>
+    <a href="carritoo.html" class="cat-chip">🫙 Conservas</a>
+    <a href="carritoo.html" class="cat-chip">🌿 Aromáticas</a>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits">
+  <div>
+    <div class="sec-tag light">— Nuestros valores</div>
+    <h2>¿Por qué elegir <em style="font-style:italic;color:var(--g5)">EcoMercado</em>?</h2>
+    <p class="benefits-sub">Creemos en un sistema alimentario más justo, fresco y sostenible. Cada compra apoya a familias campesinas.</p>
+    <div class="benefit-list">
+      <div class="bitem">
+        <div class="bitem-icon">🚫</div>
+        <div class="bitem-text">
+          <h4>Sin intermediarios</h4>
+          <p>El productor recibe directamente el pago. Mejor precio para ti, mejor ingreso para ellos.</p>
+        </div>
+      </div>
+      <div class="bitem">
+        <div class="bitem-icon">🌿</div>
+        <div class="bitem-text">
+          <h4>Productos frescos y naturales</h4>
+          <p>Cosechados a pocas horas de tu pedido. Sin conservantes ni largas cadenas de frío.</p>
+        </div>
+      </div>
+      <div class="bitem">
+        <div class="bitem-icon">📍</div>
+        <div class="bitem-text">
+          <h4>Productores verificados de tu región</h4>
+          <p>Perfiles reales con ubicación, historia y métodos de cultivo.</p>
+        </div>
+      </div>
+      <div class="bitem">
+        <div class="bitem-icon">♻️</div>
+        <div class="bitem-text">
+          <h4>Compromiso con la sostenibilidad</h4>
+          <p>Apoyamos prácticas agrícolas responsables que cuidan el suelo y la biodiversidad.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bvis-wrap">
+    <div class="bvis-main-img">
+    <img src=https://plus.unsplash.com/premium_photo-1681913162082-3c026d1b1086?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D alt="Productor local cosechando verduras frescas">-->
+    </div>
+    <div class="bvis-card-float">
+      <div class="bf-title">Productores satisfechos</div>
+      <div class="bf-sub">Incremento promedio de ingresos</div>
+      <div class="bf-num">+40%</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTOS DESTACADOS -->
+<section class="products-sec">
+  <div class="sec-header">
+    <div class="sec-tag dark">— Productos frescos</div>
+    <h2>Lo más popular esta semana</h2>
+    <p>Selección de productos frescos, directamente de nuestros productores más activos</p>
+  </div>
+  <div class="products-grid">
+
+    <div class="pcard">
+      <div class="pcard-img">
+        <img src="https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=500&q=80" alt="Brócoli Orgánico">
+      </div>
+      <div class="pcard-body">
+        <span class="pcard-badge">🌱 Orgánico</span>
+        <div class="pcard-name">Brócoli Orgánico</div>
+        <div class="pcard-prod">📍 Finca La Rosa · Cali</div>
+        <div class="pcard-footer">
+          <div><div class="pcard-price">$3.500</div><div class="pcard-unit">por kg</div></div>
+          <a href="carritoo.html"><button class="pcard-btn">+ Agregar</button></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-img">
+        <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=500&q=80" alt="Miel Silvestre">
+      </div>
+      <div class="pcard-body">
+        <span class="pcard-badge">🐝 Artesanal</span>
+        <div class="pcard-name">Miel Silvestre</div>
+        <div class="pcard-prod">📍 Semillas Vida · Cauca</div>
+        <div class="pcard-footer">
+          <div><div class="pcard-price">$12.000</div><div class="pcard-unit">por frasco</div></div>
+          <a href="carritoo.html"><button class="pcard-btn">+ Agregar</button></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-img">
+        <img src="https://images.unsplash.com/photo-1561136594-7f68413baa99?w=500&q=80" alt="Tomate Cherry">
+      </div>
+      <div class="pcard-body">
+        <span class="pcard-badge">🌱 Local</span>
+        <div class="pcard-name">Tomate Cherry</div>
+        <div class="pcard-prod">📍 Finca El Bobal · Valle</div>
+        <div class="pcard-footer">
+          <div><div class="pcard-price">$2.800</div><div class="pcard-unit">por kg</div></div>
+          <a href="carritoo.html"><button class="pcard-btn">+ Agregar</button></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-img">
+        <img src="https://images.unsplash.com/photo-1452195100486-9cc805987862?w=500&q=80" alt="Queso Campesino">
+      </div>
+      <div class="pcard-body">
+        <span class="pcard-badge">🥛 Lácteo</span>
+        <div class="pcard-name">Queso Campesino</div>
+        <div class="pcard-prod">📍 Hacienda La Paz · Nariño</div>
+        <div class="pcard-footer">
+          <div><div class="pcard-price">$8.500</div><div class="pcard-unit">por 500g</div></div>
+          <a href="carritoo.html"><button class="pcard-btn">+ Agregar</button></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="sec-footer">
+    <a href="carritoo.html" class="btn btn-green" style="padding:14px 32px;font-size:.95rem">Ver todos los productos →</a>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="how" id="como-funciona">
+  <div class="sec-tag light" style="text-align:center">— El proceso</div>
+  <h2>¿Cómo funciona EcoMercado?</h2>
+  <p class="how-sub">Comprar fresco nunca fue tan fácil. Tres pasos y listo.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-img">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80" alt="Regístrate">
+      </div>
+      <h3>Regístrate gratis</h3>
+      <p>Crea tu cuenta como Consumidor o Productor en menos de 2 minutos.</p>
+      <div class="step-arrow">›</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-img">
+        <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&q=80" alt="Explora productos">
+      </div>
+      <h3>Explora y agrega al carrito</h3>
+      <p>Navega el catálogo, filtra por categoría o ubicación y agrega tus favoritos.</p>
+      <div class="step-arrow">›</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-img">
+        <img src=https://images.unsplash.com/photo-1588964895597-cfccd6e2dbf9?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D alt="Recibe en casa">
+      </div>
+      <h3>Recibe en casa</h3>
+      <p>Confirma tu pedido y recíbelo en 2–3 días hábiles, directo del productor.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTORES -->
+<section class="producers" id="productores">
+  <div class="sec-header">
+    <div class="sec-tag dark">— Quiénes producen</div>
+    <h2>Nuestros productores destacados</h2>
+    <p>Familias reales, campos reales. Conoce a quienes cultivan tu alimento.</p>
+  </div>
+  <div class="prod-grid">
+
+    <div class="prodcard">
+      <div class="prodcard-banner">
+        <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80" alt="Finca La Rosa">
+        <div class="prodcard-banner-overlay"></div>
+      </div>
+      <div class="prodcard-body">
+        <div class="prodcard-avatar">
+          <img src="https://images.unsplash.com/photo-1595152772835-219674b2a163?w=100&q=80" alt="Productor">
+        </div>
+        <div class="prodcard-name">Finca La Rosa</div>
+        <div class="prodcard-loc">📍 Cali, Valle del Cauca</div>
+        <div class="prodcard-tags"><span class="ptag">Verduras</span><span class="ptag">Orgánico</span><span class="ptag">Hortalizas</span></div>
+        <div class="prodcard-stats">
+          <div class="pstat"><div class="pstat-n">12</div><div class="pstat-l">Productos</div></div>
+          <div class="pstat"><div class="pstat-n">98%</div><div class="pstat-l">Satisfacción</div></div>
+          <div class="pstat"><div class="pstat-n">320</div><div class="pstat-l">Pedidos</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prodcard">
+      <div class="prodcard-banner">
+        <img src="https://images.unsplash.com/photo-1558642891-54be180ea339?w=600&q=80" alt="Semillas Vida">
+        <div class="prodcard-banner-overlay"></div>
+      </div>
+      <div class="prodcard-body">
+        <div class="prodcard-avatar">
+          <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&q=80" alt="Productora">
+        </div>
+        <div class="prodcard-name">Semillas Vida</div>
+        <div class="prodcard-loc">📍 Popayán, Cauca</div>
+        <div class="prodcard-tags"><span class="ptag">Miel</span><span class="ptag">Artesanal</span><span class="ptag">Natural</span></div>
+        <div class="prodcard-stats">
+          <div class="pstat"><div class="pstat-n">7</div><div class="pstat-l">Productos</div></div>
+          <div class="pstat"><div class="pstat-n">99%</div><div class="pstat-l">Satisfacción</div></div>
+          <div class="pstat"><div class="pstat-n">185</div><div class="pstat-l">Pedidos</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prodcard">
+      <div class="prodcard-banner">
+        <img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=600&q=80" alt="Hacienda La Paz">
+        <div class="prodcard-banner-overlay"></div>
+      </div>
+      <div class="prodcard-body">
+        <div class="prodcard-avatar">
+          <img src="https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=100&q=80" alt="Productor">
+        </div>
+        <div class="prodcard-name">Hacienda La Paz</div>
+        <div class="prodcard-loc">📍 Pasto, Nariño</div>
+        <div class="prodcard-tags"><span class="ptag">Lácteos</span><span class="ptag">Quesos</span><span class="ptag">Yogurt</span></div>
+        <div class="prodcard-stats">
+          <div class="pstat"><div class="pstat-n">9</div><div class="pstat-l">Productos</div></div>
+          <div class="pstat"><div class="pstat-n">97%</div><div class="pstat-l">Satisfacción</div></div>
+          <div class="pstat"><div class="pstat-n">240</div><div class="pstat-l">Pedidos</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="sec-footer">
+    <a href="#como-funciona" class="btn btn-green" style="padding:14px 32px;font-size:.95rem">¿Eres productor? Únete →</a>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-banner">
+  <div class="cta-bg-img">
+    <img src="https://images.unsplash.com/photo-1471193945509-9ad0617afabf?w=1400&q=80" alt="Campo colombiano">
+  </div>
+  <div class="cta-bg"></div>
+  <div class="cta-content">
+    <h2>¿Listo para comer más fresco?</h2>
+    <p>Únete a miles de familias que ya compran directo del campo. Registrate gratis hoy.</p>
+    <div class="cta-btns">
+      <a href="carritoo.html" class="btn btn-amber" style="padding:14px 30px;font-size:1rem">🛒 Ir a la tienda</a>
+      <a href="#productores" class="btn" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:14px 30px;font-size:1rem">Conocer productores</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-top">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:36px;height:36px;background:linear-gradient(135deg,var(--g2),var(--g4));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px">🌿</div>
+        <span style="font-family:'Playfair Display',serif;font-weight:900;font-size:1.2rem;color:#fff">EcoMercado</span>
+      </div>
+      <p class="foot-desc">Conectamos productores agrícolas locales con consumidores. Del campo a tu mesa, sin intermediarios.</p>
+      <div class="foot-social">
+        <div class="social-btn">📘</div>
+        <div class="social-btn">📸</div>
+        <div class="social-btn">🐦</div>
+      </div>
+    </div>
+    <div class="foot-col">
+      <h4>Navegar</h4>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="carritoo.html">Mi Carrito</a></li>
+        <li><a href="#productores">Productores</a></li>
+        <li><a href="#como-funciona">Nosotros</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Cuenta</h4>
+      <ul>
+        <li><a href="Registro.html">Registrarse</a></li>
+        <li><a href="login.html">Iniciar sesión</a></li>
+        <li><a href="#" onclick="cerrarSesion();return false">Cerrar sesión</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Contacto</h4>
+      <ul>
+        <li><a href="#">info@ecomercado.co</a></li>
+        <li><a href="#">+57 300 000 0000</a></li>
+        <li><a href="#">Cali, Colombia</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 EcoMercado · Universidad Santiago de Cali</span>
+    <div><a href="#">Privacidad</a><a href="#">Términos</a></div>
+  </div>
+</footer>
+
+<script>
+// Mostrar botones según sesión
+(function() {
+  const token  = localStorage.getItem('eco_token');
+  const nombre = localStorage.getItem('eco_nombre');
+  const nav    = document.getElementById('nav-right');
+  let sesionActiva = false;
+
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      if (payload.exp * 1000 > Date.now()) sesionActiva = true;
+      else { localStorage.removeItem('eco_token'); localStorage.removeItem('eco_nombre'); }
+    } catch(e) { localStorage.removeItem('eco_token'); localStorage.removeItem('eco_nombre'); }
+  }
+
+  if (sesionActiva) {
+    nav.innerHTML = `
+      <a href="carritoo.html" class="btn btn-outline">🛒 Carrito</a>
+      <span style="font-size:.88rem;font-weight:600;color:var(--g2);padding:0 4px">👋 ${nombre || 'Usuario'}</span>
+      <button onclick="cerrarSesion()" class="btn btn-outline" style="cursor:pointer">Salir</button>
+    `;
+  } else {
+    nav.innerHTML = `
+      <a href="carritoo.html" class="btn btn-outline">🛒 Carrito</a>
+      <a href="inicio.html" class="btn btn-outline">Iniciar sesión</a>
+      <a href="Registro.html" class="btn btn-green">Registrarse</a>
+    `;
+  }
+})();
+
+function cerrarSesion() {
+  fetch('http://localhost:5000/api/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
+  localStorage.removeItem('eco_token');
+  localStorage.removeItem('eco_nombre');
+  window.location.href = 'index.html';
+}
+
+</script>
+</body>
+</html>
